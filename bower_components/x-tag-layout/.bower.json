@@ -1,0 +1,28 @@
+{
+  "name": "x-tag-layout",
+  "description": "",
+  "version": "0.1.2",
+  "keywords": [
+    "web-components",
+    "x-tag"
+  ],
+  "main": [
+    "src/layout.js",
+    "src/layout.css",
+    "src/layout.styl"
+  ],
+  "dependencies": {
+    "x-tag-core": "*",
+    "brick-common": "*"
+  },
+  "homepage": "https://github.com/x-tag/layout",
+  "_release": "0.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.2",
+    "commit": "c43dfd10579178574d3a48dfdbc98e3c527fa0b4"
+  },
+  "_source": "git://github.com/x-tag/layout.git",
+  "_target": "*",
+  "_originalSource": "x-tag-layout"
+}

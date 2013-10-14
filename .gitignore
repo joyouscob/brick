@@ -3,7 +3,6 @@ node_modules
 .DS_Store
 brick-*.zip
 _component-ui-defaults.css
-bower_components
 dev-repos
 component
 dist/zip

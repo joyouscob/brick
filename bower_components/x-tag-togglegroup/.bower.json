@@ -1,0 +1,32 @@
+{
+  "name": "x-tag-togglegroup",
+  "description": "A set of associated toggle options, represented as a bar of buttons",
+  "version": "0.1.1",
+  "keywords": [
+    "web-components",
+    "button",
+    "icon",
+    "label",
+    "x-tag"
+  ],
+  "main": [
+    "src/togglegroup.js",
+    "src/togglegroup.css",
+    "src/togglegroup.styl"
+  ],
+  "dependencies": {
+    "x-tag-core": "*",
+    "brick-common": "*",
+    "x-tag-toggle": "*"
+  },
+  "homepage": "https://github.com/x-tag/togglegroup",
+  "_release": "0.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.1",
+    "commit": "8a34b5cbbc8def28ae10770571a67864fe9ab971"
+  },
+  "_source": "git://github.com/x-tag/togglegroup.git",
+  "_target": "*",
+  "_originalSource": "x-tag-togglegroup"
+}

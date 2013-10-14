@@ -1,0 +1,31 @@
+{
+  "name": "x-tag-tooltip",
+  "description": "Content callout that appears in current context to point at an element and is associated with a triggering element and interaction-style in the underlying content",
+  "version": "0.1.1",
+  "keywords": [
+    "web-components",
+    "button",
+    "icon",
+    "label",
+    "x-tag"
+  ],
+  "main": [
+    "src/tooltip.js",
+    "src/tooltip.css",
+    "src/tooltip.styl"
+  ],
+  "dependencies": {
+    "x-tag-core": "*",
+    "brick-common": "*"
+  },
+  "homepage": "https://github.com/x-tag/tooltip",
+  "_release": "0.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.1",
+    "commit": "e802445a3f40f98bd758a5b833b81afa2dc64259"
+  },
+  "_source": "git://github.com/x-tag/tooltip.git",
+  "_target": "*",
+  "_originalSource": "x-tag-tooltip"
+}

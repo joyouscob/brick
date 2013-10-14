@@ -1,0 +1,34 @@
+{
+  "name": "x-tag-datepicker",
+  "description": "A polyfill for <input type='date'>",
+  "version": "0.1.1",
+  "keywords": [
+    "web-components",
+    "button",
+    "icon",
+    "label",
+    "x-tag"
+  ],
+  "main": [
+    "src/datepicker.js",
+    "src/datepicker.css",
+    "src/datepicker.styl"
+  ],
+  "dependencies": {
+    "x-tag-core": "*",
+    "brick-common": "*"
+  },
+  "devDependencies": {
+    "x-tag-calendar": "*"
+  },
+  "homepage": "https://github.com/x-tag/datepicker",
+  "_release": "0.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.1",
+    "commit": "e9abc62d3713478deff710a3bcfb31ea510d336b"
+  },
+  "_source": "git://github.com/x-tag/datepicker.git",
+  "_target": "*",
+  "_originalSource": "x-tag-datepicker"
+}

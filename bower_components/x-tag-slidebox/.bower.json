@@ -1,0 +1,31 @@
+{
+  "name": "x-tag-slidebox",
+  "description": "Slides panels of content",
+  "version": "0.2.2",
+  "keywords": [
+    "web-components",
+    "slidebox",
+    "structural",
+    "element",
+    "x-tag"
+  ],
+  "main": [
+    "src/slidebox.js",
+    "src/slidebox.css",
+    "src/slidebox.styl"
+  ],
+  "dependencies": {
+    "x-tag-core": "*",
+    "brick-common": "*"
+  },
+  "homepage": "https://github.com/x-tag/slidebox",
+  "_release": "0.2.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.2.2",
+    "commit": "0f40acf2b487adf4958ba38570e94774c5637916"
+  },
+  "_source": "git://github.com/x-tag/slidebox.git",
+  "_target": "*",
+  "_originalSource": "x-tag-slidebox"
+}

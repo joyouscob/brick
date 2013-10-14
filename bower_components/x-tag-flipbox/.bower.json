@@ -1,0 +1,28 @@
+{
+  "name": "x-tag-flipbox",
+  "description": "",
+  "version": "0.2.3",
+  "keywords": [
+    "web-components",
+    "x-tag"
+  ],
+  "main": [
+    "src/flipbox.js",
+    "src/flipbox.css",
+    "src/flipbox.styl"
+  ],
+  "dependencies": {
+    "x-tag-core": "*",
+    "brick-common": "*"
+  },
+  "homepage": "https://github.com/x-tag/flipbox",
+  "_release": "0.2.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.2.3",
+    "commit": "ea3e1e007ff5362173db484c0d289748d8582994"
+  },
+  "_source": "git://github.com/x-tag/flipbox.git",
+  "_target": "*",
+  "_originalSource": "x-tag-flipbox"
+}
