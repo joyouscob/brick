@@ -10,9 +10,9 @@ x-appbar > *:before{background-color:rgba(255,255,255,0.25);width:2px;top:0;bott
 x-calendar{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;-moz-tap-highlight-color:transparent;tap-highlight-color:transparent;position:relative;display:inline-block;margin:0;padding:0;max-width:100%;font-size:1em;text-align:center;overflow:hidden;}
 x-calendar,x-calendar *{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
 x-calendar .calendar{position:relative;display:inline-block;overflow:hidden;width:100%;height:100%}
-x-calendar .month{display:inline-block;margin:0;padding:0;vertical-align:top;white-space:nowrap;width:224px;max-width:100%}
+x-calendar .month{display:inline-block;margin:0;padding:0;vertical-align:top;white-space:nowrap;width:168px;max-width:100%}
 x-calendar .week,x-calendar .weekday-labels{margin:1px 0;overflow:visible;width:100%;white-space:nowrap}
-x-calendar .day,x-calendar .prev,x-calendar .next,x-calendar .weekday-label{display:inline-block;width:32px}
+x-calendar .day,x-calendar .prev,x-calendar .next,x-calendar .weekday-label{display:inline-block;width:24px}
 x-calendar .month-label,x-calendar .weekday-labels,x-calendar .week,x-calendar .prev,x-calendar .next{height:2em;line-height:2em}
 x-calendar .weekday-label{opacity:.8;font-size:.8em}
 x-calendar .weekday-label,x-calendar .day{height:100%;line-height:inherit;margin:0 auto}
@@ -139,7 +139,7 @@ x-slider[polyfill] > .slider-thumb{border-radius:4px;border:1px solid #808080;bo
 x-slider[polyfill] > .slider-thumb:hover{background-color:#e7f5fd;background-repeat:no-repeat;background-image:-o-linear-gradient(top,#e7f5fd,#e7f5fd 25%,#a4d9f7);background-image:-ms-linear-gradient(top,#e7f5fd,#e7f5fd 25%,#a4d9f7);background-image:-moz-linear-gradient(top,#e7f5fd,#e7f5fd 25%,#a4d9f7);background-image:-webkit-linear-gradient(top,#e7f5fd,#e7f5fd 25%,#a4d9f7);background-image:linear-gradient(top,#e7f5fd,#e7f5fd 25%,#a4d9f7)}
 x-slider[polyfill] > .slider-thumb[active]{background-color:#bae2f9;background-repeat:no-repeat;background-image:-o-linear-gradient(top,#bae2f9,#bae2f9 25%,#7ec9f4);background-image:-ms-linear-gradient(top,#bae2f9,#bae2f9 25%,#7ec9f4);background-image:-moz-linear-gradient(top,#bae2f9,#bae2f9 25%,#7ec9f4);background-image:-webkit-linear-gradient(top,#bae2f9,#bae2f9 25%,#7ec9f4);background-image:linear-gradient(top,#bae2f9,#bae2f9 25%,#7ec9f4)}
 
-x-tabbar{display:block;display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;width:100%;overflow:hidden;white-space:nowrap;text-align:center;}
+x-tabbar{display:block;display:-webkit-box;display:-moz-box;display:-ms-flexbox;display:-webkit-flex;display:flex;width:100%;min-height:24px;overflow:hidden;white-space:nowrap;text-align:center;}
 x-tabbar > x-tabbar-tab{min-width:auto;min-height:auto;-webkit-box-flex:1;-moz-box-flex:1;-webkit-flex:1;-ms-flex:1;box-flex:1;flex:1;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;display:inline-block;height:100%;vertical-align:middle;}
 x-tabbar > x-tabbar-tab > *:only-child{vertical-align:top;height:100%;width:100%;margin:0 !important}
 x-tabbar{background-color:#a0a0a0;background-repeat:no-repeat;background-position:0 0;background-image:-o-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-moz-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-webkit-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:-ms-linear-gradient(-90deg,#a0a0a0 14%,#858585 100%);background-image:linear-gradient(-180deg,#a0a0a0 14%,#858585 100%);font-family:"_OpenSansBrick","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;color:#d4d4d4;letter-spacing:-.31em;}
