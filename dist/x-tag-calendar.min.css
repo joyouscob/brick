@@ -16,6 +16,7 @@ x-calendar .prev,x-calendar .next{position:absolute;top:0;max-width:3em}
 x-calendar .prev{left:0}
 x-calendar .next{right:0}
 x-calendar:not([active]) .day:hover,x-calendar:not([active]) .prev:hover,x-calendar:not([active]) .next:hover{cursor:pointer}
+
 x-calendar{border:2px solid #888;font-size:1em;font-family:"_OpenSansBrick","Segoe UI",Frutiger,"Frutiger Linotype","Dejavu Sans","Helvetica Neue",Arial,sans-serif;background-color:#fff;color:#444;}
 x-calendar .weekday-label{opacity:.8}
 x-calendar .month-label{border-bottom:1px dashed #808080}
