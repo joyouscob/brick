@@ -66,6 +66,7 @@
   }
 
 // DOM
+
   var str = '';
   function query(element, selector){
     return (selector || str).length ? toArray(element.querySelectorAll(selector)) : [];
@@ -97,25 +98,46 @@
     return source;
   }
 
-  function mergeMixin(type, mixin, option) {
-    var original = {};
-    for (var o in option) original[o.split(':')[0]] = true;
-    for (var x in mixin) if (!original[x.split(':')[0]]) option[x] = mixin[x];
+  function wrapMixin(tag, key, pseudo, value, original){
+    if (typeof original[key] != 'function') original[key] = value;
+    else {
+      original[key] = xtag.wrap(original[key], xtag.applyPseudos(pseudo, value, tag.pseudos));
+    }
+  }
+
+  var uniqueMixinCount = 0;
+  function mergeMixin(tag, mixin, original, mix) {
+    if (mix) {
+      var uniques = {};
+      for (var z in original) uniques[z.split(':')[0]] = z;
+      for (z in mixin) {
+        wrapMixin(tag, uniques[z.split(':')[0]] || z, z, mixin[z], original);
+      }
+    }
+    else {
+      for (var zz in mixin){
+        wrapMixin(tag, zz + ':__mixin__(' + (uniqueMixinCount++) + ')', zz, mixin[zz], original);
+      }
+    }
   }
 
   function applyMixins(tag) {
     tag.mixins.forEach(function (name) {
       var mixin = xtag.mixins[name];
       for (var type in mixin) {
-        switch (type) {
-          case 'lifecycle': case 'methods':
-            mergeMixin(type, mixin[type], tag[type]);
-            break;
-          case 'accessors': case 'prototype':
-            for (var z in mixin[type]) mergeMixin(z, mixin[type], tag.accessors);
-            break;
-          case 'events':
-            break;
+        var item = mixin[type],
+            original = tag[type];
+        if (!original) tag[type] = item;
+        else {
+          switch (type){
+            case 'accessors': case 'prototype':
+              for (var z in item) {
+                if (!original[z]) original[z] = item[z];
+                else mergeMixin(tag, item[z], original[z], true);
+              }
+              break;
+            default: mergeMixin(tag, item, original, type != 'events');
+          }
         }
       }
     });
@@ -125,10 +147,16 @@
 // Events
 
   function delegateAction(pseudo, event) {
-    var target = query(this, pseudo.value).filter(function(node){
-      return node == event.target || node.contains ? node.contains(event.target) : null;
-    })[0];
-    return target ? pseudo.listener = pseudo.listener.bind(target) : null;
+    var match, target = event.target;
+    if (xtag.matchSelector(target, pseudo.value)) match = target;
+    else if (xtag.matchSelector(target, pseudo.value + ' *')) {
+      var parent = target.parentNode;
+      while (!match) {
+        if (xtag.matchSelector(parent, pseudo.value)) match = parent;
+        parent = parent.parentNode;
+      }
+    }
+    return match ? pseudo.listener = pseudo.listener.bind(match) : null;
   }
 
   function touchFilter(event) {
@@ -253,6 +281,15 @@
     }
   }
 
+  var readyTags = {};
+  function fireReady(name){
+    readyTags[name] = (readyTags[name] || []).filter(function(obj){
+      return (obj.tags = obj.tags.filter(function(z){
+        return z != name && !xtag.tags[z];
+      })).length || obj.fn();
+    });
+  }
+
 /*** X-Tag Object Definition ***/
 
   var xtag = {
@@ -317,7 +354,7 @@
       };
 
       if (tag.lifecycle.inserted) tag.prototype.enteredViewCallback = { value: tag.lifecycle.inserted, enumerable: true };
-      if (tag.lifecycle.removed) tag.prototype.leftDocumentCallback = { value: tag.lifecycle.removed, enumerable: true };
+      if (tag.lifecycle.removed) tag.prototype.leftViewCallback = { value: tag.lifecycle.removed, enumerable: true };
       if (tag.lifecycle.attributeChanged) tag.prototype.attributeChangedCallback = { value: tag.lifecycle.attributeChanged, enumerable: true };
 
       var setAttribute = tag.prototype.setAttribute || HTMLElement.prototype.setAttribute;
@@ -358,28 +395,35 @@
       };
 
       var elementProto = basePrototype ?
-        basePrototype :
-          options['extends'] ?
-            Object.create(doc.createElement(options['extends'])
-              .constructor).prototype :
-          win.HTMLElement.prototype;
+            basePrototype :
+            options['extends'] ?
+            Object.create(doc.createElement(options['extends']).constructor).prototype :
+            win.HTMLElement.prototype;
 
-      return doc.register(_name, {
-        'extends': options['extends'],
+      var definition = {
         'prototype': Object.create(elementProto, tag.prototype)
-      });
+      };
+      if (options['extends']) {
+        definition['extends'] = options['extends'];
+      }
+      var reg = doc.register(_name, definition);
+      fireReady(_name);
+      return reg;
+    },
 
+    ready: function(names, fn){
+      var obj = { tags: toArray(names), fn: fn };
+      if (obj.tags.reduce(function(last, name){
+        if (xtag.tags[name]) return last;
+        (readyTags[name] = readyTags[name] || []).push(obj);
+      }, true)) fn();
     },
 
     /* Exposed Variables */
 
     mixins: {},
     prefix: prefix,
-    touches: {
-      active: [],
-      changed: []
-    },
-    captureEvents: ['focus', 'blur', 'scroll', 'underflow', 'overflow', 'overflowchanged'],
+    captureEvents: ['focus', 'blur', 'scroll', 'underflow', 'overflow', 'overflowchanged', 'DOMMouseScroll'],
     customEvents: {
       overflow: createFlowEvent('over'),
       underflow: createFlowEvent('under'),
@@ -403,6 +447,13 @@
       leave: {
         attach: ['mouseout', 'touchleave'],
         condition: touchFilter
+      },
+      scrollwheel: {
+        attach: ['DOMMouseScroll', 'mousewheel'],
+        condition: function(event){
+          event.delta = event.wheelDelta ? event.wheelDelta / 40 : Math.round(event.detail / 3.5 * -1);
+          return true;
+        }
       },
       tapstart: {
         observe: {
@@ -428,7 +479,6 @@
               custom.lastDrag = event;
               return (last.pageX != event.pageX && last.pageY != event.pageY) || null;
             case 'tapstart':
-              custom.touches = custom.touches || 1;
               if (!custom.move) {
                 custom.current = this;
                 custom.move = xtag.addEvents(this, {
@@ -439,10 +489,9 @@
               }
               break;
             case 'tapend': case 'dragend': case 'touchcancel':
-              custom.touches--;
-              if (!custom.touches) {
-                xtag.removeEvents(custom.current , custom.move || {});
-                xtag.removeEvent(doc, custom.tapend || {});
+              if (!event.touches.length) {
+                if (custom.move) xtag.removeEvents(custom.current , custom.move || {});
+                if (custom.tapend) xtag.removeEvent(doc, custom.tapend || {});
                 delete custom.lastDrag;
                 delete custom.current;
                 delete custom.tapend;
@@ -453,6 +502,7 @@
       }
     },
     pseudos: {
+      __mixin__: {},
       keypass: keypseudo,
       keyfail: keypseudo,
       delegate: { action: delegateAction },
@@ -483,8 +533,9 @@
     wrap: function (original, fn) {
       return function(){
         var args = toArray(arguments),
-          returned = original.apply(this, args);
-        return returned === false ? false : fn.apply(this, typeof returned != 'undefined' ? toArray(returned) : args);
+            output = original.apply(this, args);
+        fn.apply(this, args);
+        return output;
       };
     },
 
@@ -505,12 +556,11 @@
 
     query: query,
 
-    skipTransition: function(element, fn, bind){
+    skipTransition: function(element, fn){
       var prop = prefix.js + 'TransitionProperty';
       element.style[prop] = element.style.transitionProperty = 'none';
-      xtag.requestFrame(function(){
-        var callback;
-        if (fn) callback = fn.call(bind);
+      var callback = fn();
+      return xtag.requestFrame(function(){
         xtag.requestFrame(function(){
           element.style[prop] = element.style.transitionProperty = '';
           if (callback) xtag.requestFrame(callback);
@@ -520,11 +570,16 @@
 
     requestFrame: (function(){
       var raf = win.requestAnimationFrame ||
-        win[prefix.lowercase + 'RequestAnimationFrame'] ||
-        function(fn){ return win.setTimeout(fn, 20); };
-      return function(fn){
-        return raf.call(win, fn);
-      };
+                win[prefix.lowercase + 'RequestAnimationFrame'] ||
+                function(fn){ return win.setTimeout(fn, 20); };
+      return function(fn){ return raf(fn); };
+    })(),
+
+    cancelFrame: (function(){
+      var cancel = win.cancelAnimationFrame ||
+                   win[prefix.lowercase + 'CancelAnimationFrame'] ||
+                   win.clearTimeout;
+      return function(id){ return cancel(id); };
     })(),
 
     matchSelector: function (element, selector) {
@@ -599,7 +654,7 @@
 
     /* PSEUDOS */
 
-    applyPseudos: function(key, fn, element, source) {
+    applyPseudos: function(key, fn, target, source) {
       var listener = fn,
           pseudos = {};
       if (key.match(':')) {
@@ -623,15 +678,16 @@
                     name: name,
                     value: value,
                     source: source,
+                    'arguments': pseudo['arguments'],
                     listener: last
                   };
               var output = pseudo.action.apply(this, [obj].concat(args));
               if (output === null || output === false) return output;
               return obj.listener.apply(this, args);
             };
-            if (element && pseudo.onAdd) {
-              if (element.getAttribute) pseudo.onAdd.call(element, pseudo);
-              else element.push(pseudo);
+            if (target && pseudo.onAdd) {
+              if (target.nodeName) pseudo.onAdd.call(target, pseudo);
+              else target.push(pseudo);
             }
           });
         }
@@ -642,9 +698,9 @@
       return listener;
     },
 
-    removePseudos: function(element, event){
-      event._pseudos.forEach(function(obj){
-        if (obj.onRemove) obj.onRemove.call(element, obj);
+    removePseudos: function(target, pseudos){
+      pseudos.forEach(function(obj){
+        if (obj.onRemove) obj.onRemove.call(target, obj);
       });
     },
 
@@ -687,7 +743,12 @@
         var args = toArray(arguments),
             output = event.condition.apply(this, args.concat([event]));
         if (!output) return output;
-        if (e.type != key) xtag.fireEvent(e.target, key, { baseEvent: e, detail: { __stack__: stack } });
+        if (e.type != key) {
+          xtag.fireEvent(e.target, key, {
+            baseEvent: e,
+            detail: output !== true && (output.__stack__ = stack) ? output : { __stack__: stack }
+          });
+        }
         else return event.stack.apply(this, args);
       };
       event.attach.forEach(function(name) {
@@ -697,7 +758,10 @@
         custom.observer = function(e){
           var output = event.condition.apply(this, toArray(arguments).concat([custom]));
           if (!output) return output;
-          xtag.fireEvent(e.target, key, { baseEvent: e });
+          xtag.fireEvent(e.target, key, {
+            baseEvent: e,
+            detail: output !== true ? output : {}
+          });
         };
         for (var z in custom.observe) xtag.addEvent(custom.observe[z] || document, z, custom.observer, true);
         custom.__observing__ = true;
@@ -729,7 +793,7 @@
     removeEvent: function (element, type, event) {
       event = event || type;
       event.onRemove.call(element, event, event.listener);
-      xtag.removePseudos(element, event);
+      xtag.removePseudos(element, event._pseudos);
       event._attach.forEach(function(obj) {
         xtag.removeEvent(element, obj);
       });
@@ -743,7 +807,7 @@
     fireEvent: function(element, type, options, warn){
       var event = doc.createEvent('CustomEvent');
       options = options || {};
-      if (warn) console.warn('fireEvent has been modified, more info here: ');
+      if (warn) console.warn('fireEvent has been modified');
       event.initCustomEvent(type,
         options.bubbles !== false,
         options.cancelable !== false,
@@ -752,7 +816,7 @@
       if (options.baseEvent) inheritEvent(event, options.baseEvent);
       try { element.dispatchEvent(event); }
       catch (e) {
-        console.warn('This error may have been caused by a change in the fireEvent method, more info here: ', e);
+        console.warn('This error may have been caused by a change in the fireEvent method', e);
       }
     },
 
@@ -796,17 +860,23 @@
 
 /*** Universal Touch ***/
 
-var touchCount = 0, touchTarget = null;
+var touching = false,
+    touchTarget = null;
 
 doc.addEventListener('mousedown', function(e){
-  touchCount++;
+  touching = true;
   touchTarget = e.target;
 }, true);
 
 doc.addEventListener('mouseup', function(){
-  touchCount--;
+  touching = false;
   touchTarget = null;
-}, false);
+}, true);
+
+doc.addEventListener('dragend', function(){
+  touching = false;
+  touchTarget = null;
+}, true);
 
 var UIEventProto = {
   touches: {
@@ -814,22 +884,22 @@ var UIEventProto = {
     get: function(){
       return this.__touches__ ||
         (this.identifier = 0) ||
-        (this.__touches__ = touchCount ? [this] : []);
+        (this.__touches__ = touching ? [this] : []);
     }
   },
   targetTouches: {
     configurable: true,
     get: function(){
       return this.__targetTouches__ || (this.__targetTouches__ =
-        (touchCount && this.currentTarget &&
+        (touching && this.currentTarget &&
         (this.currentTarget == touchTarget ||
-        (this.currentTarget.contains && this.currentTarget.contains(touchTarget)))) ? [this] : []);
+        (this.currentTarget.contains && this.currentTarget.contains(touchTarget)))) ? (this.identifier = 0) || [this] : []);
     }
   },
   changedTouches: {
     configurable: true,
     get: function(){
-      return this.touches;
+      return this.__changedTouches__ || (this.identifier = 0) || (this.__changedTouches__ = [this]);
     }
   }
 };
@@ -839,20 +909,6 @@ for (z in UIEventProto){
   Object.defineProperty(UIEvent.prototype, z, UIEventProto[z]);
 }
 
-var touchReset = {
-    value: null,
-    writable: true,
-    configurable: true
-  },
-  TouchEventProto = {
-    touches: touchReset,
-    targetTouches: touchReset,
-    changedTouches: touchReset
-  };
-
-if (win.TouchEvent) {
-  for (z in TouchEventProto) win.TouchEvent.prototype[z] = TouchEventProto[z];
-}
 
 /*** Custom Event Definitions ***/
 
@@ -888,12 +944,13 @@ if (win.TouchEvent) {
   }
 
   function checkTapPosition(el, tap, e){
-    var touch = e.changedTouches[0];
+    var touch = e.changedTouches[0],
+        tol = tap.gesture.tolerance;
     if (
-      touch.pageX < el.__tap__.x + tap.gesture.tolerance &&
-      touch.pageX > el.__tap__.x - tap.gesture.tolerance &&
-      touch.pageY < el.__tap__.y + tap.gesture.tolerance &&
-      touch.pageY > el.__tap__.y - tap.gesture.tolerance
+      touch.pageX < el.__tap__.x + tol &&
+      touch.pageX > el.__tap__.x - tol &&
+      touch.pageY < el.__tap__.y + tol &&
+      touch.pageY > el.__tap__.y - tol
     ) return true;
   }
 

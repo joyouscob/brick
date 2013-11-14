@@ -1,7 +1,7 @@
 {
   "name": "x-tag-calendar",
   "description": "A port of Potch's fortnight.js calendar UI in component form",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "keywords": [
     "web-components",
     "button",
@@ -19,11 +19,11 @@
     "brick-common": "*"
   },
   "homepage": "https://github.com/x-tag/calendar",
-  "_release": "0.1.1",
+  "_release": "0.1.3",
   "_resolution": {
     "type": "version",
-    "tag": "0.1.1",
-    "commit": "628a3e5e32c023447a7193d2c75914a50e6111d5"
+    "tag": "0.1.3",
+    "commit": "f2bdf47fade79e7b59239af78b4ad3311a048e3e"
   },
   "_source": "git://github.com/x-tag/calendar.git",
   "_target": "*",

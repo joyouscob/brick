@@ -24,7 +24,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="index.html">
         <img class="logo" src="site/img/logo.png">
-        Brick<small> 0.9.0</small>
+        Brick<small> 0.9.1</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
@@ -63,13 +63,9 @@
           
           <a class="list-group-item scrollnav" href="#x-tag-calendar">calendar</a>
           
-          <a class="list-group-item scrollnav" href="#x-tag-datepicker">datepicker</a>
-          
           <a class="list-group-item scrollnav" href="#x-tag-deck">deck</a>
           
           <a class="list-group-item scrollnav" href="#x-tag-flipbox">flipbox</a>
-          
-          <a class="list-group-item scrollnav" href="#x-tag-iconbutton">iconbutton</a>
           
           <a class="list-group-item scrollnav" href="#x-tag-layout">layout</a>
           
@@ -81,8 +77,6 @@
           
           <a class="list-group-item scrollnav" href="#x-tag-toggle">toggle</a>
           
-          <a class="list-group-item scrollnav" href="#x-tag-togglegroup">togglegroup</a>
-          
           <a class="list-group-item scrollnav" href="#x-tag-tooltip">tooltip</a>
           
         </div>
@@ -92,7 +86,7 @@
       <section id="usage">
         <h1>Usage</h1>
         <p>To include Brick in your project, include your downloaded stylesheet and script files in your project's page like normal:
-          <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-0.9.0.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-0.9.0.js&quot;&gt;&lt;/script&gt;</pre>
+          <pre class="prettyprint">&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;brick-0.9.1.css&quot;/&gt;<br/>&lt;script type=&quot;text/javascript&quot; src=&quot;brick-0.9.1.js&quot;&gt;&lt;/script&gt;</pre>
         </p>
         <p>Using any of Brick's components is as simple as including the respective tag in your HTML markup. (See individual component docs for details.)</p>
         <p><b>Important:</b> To run code relying on any of Brick's tags, make sure to wait until the x-tags library's <code class="prettyprint">"DOMComponentsLoaded"</code> event instead of just <code>window.onload</code>:</p>
@@ -356,102 +350,6 @@
             <dl>
               <dt><code>disableUIToggle</code></dt>
               <dd>If true, sets the &#39;disable-ui-toggle&#39; attribute. Otherwise, removes the &#39;disable-ui-toggle&#39; attribute.</dd>
-            </dl>
-            
-          
-        </section>
-      
-        <section id="x-tag-datepicker" class="main-sect">
-          <h1>datepicker
-            
-              <small><a href="demos/x-tag-datepicker/index.html">View Demo &raquo;</a></small>
-            
-          </h1>
-          <p>A polyfill for &lt;input type=&#39;date&#39;&gt; utilizing the x-calendar component.</p>
-
-          
-            <h2>Attributes</h2>
-            
-            <dl>
-              <dt><code>name</code></dt>
-              <dd>Indicates the name of the input to use. This is the default keyname that will be submitted if submitted through a form.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>value</code></dt>
-              <dd>Indicates the currently displayed value of the datepicker. Can also be used to initialize a certain value.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>polyfill</code></dt>
-              <dd>Indicates whether or not the datepicker is using a polyfill UI or not. While this is set automatically, this can also be set in markup to force the datepicker to always use its polyfill UI version.</dd>
-            </dl>
-            
-          
-
-          
-
-          
-            <h2>Events</h2>
-            
-            <dl>
-              <dt><code>input</code></dt>
-              <dd>Fired by the &lt;x-datepicker&gt; any time the user selects a date. Also fired as the user types in a date.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>change</code></dt>
-              <dd>Fired by the &lt;x-datepicker&gt; whenever the submitValue of the datepicker changes or when the value is finalized. In other words, while input fires as the user types, change only fires if this changes the date selected by the datepicker, or if the user hits enter/leaves the datepicker&#39;s focus and the date gets parsed into ISO format.</dd>
-            </dl>
-            
-          
-
-          
-            <h2>Getters</h2>
-            
-            <dl>
-              <dt><code>name</code></dt>
-              <dd>Retrieves the current name of the datepicker element. This is required for a value to be submitted to a default form.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>value</code></dt>
-              <dd>Retrieves the currently displayed value of the datepicker element. Note that this may not necessarily be the value that would be submitted to a form. For example, if the user is currently typing &#39;July 4, 2013&#39; and hasn&#39;t left focus yet, the value is &#39;July 4, 2013&#39;, not &#39;2013-07-04&#39;.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>submitValue</code></dt>
-              <dd>Retrieves the value that the datepicker should submit to a form. For example, if the user is currently typing &#39;July 4, 2013&#39; and hasn&#39;t left focus yet, the submitValue is &#39;2013-07-04&#39;, not &#39;July 4, 2013&#39;. Also note that unless the datepicker has a &#39;name&#39; attribute, this does not guarantee that this will actually be submitted to a form.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>polyfill</code></dt>
-              <dd>Retrieves whether or not the datepicker is currently using the polyfill version of its UI or not.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>labels</code></dt>
-              <dd>Much like an `&lt;x-calendar&gt;`&#39;s `.labels` property, `&lt;x-datepicker&gt;`s also have a `.labels` property to allow relabeling/localization of the component. <br/> The format and interface for the datepicker&#39;s `.labels` property is near identical to `&lt;x-calendar&gt;`&#39;s `.labels` property, so it would be best to read the calendar&#39;s labels documentation for full details.</dd>
-            </dl>
-            
-          
-
-          
-            <h2>Setters</h2>
-            
-            <dl>
-              <dt><code>name</code></dt>
-              <dd>Sets the current name of the datepicker element. This is required for a value to be submitted to a default form.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>value</code></dt>
-              <dd>Sets the currently displayed value of the datepicker element. Note that submitValue will still return the correct parsed version of the new value (ie: ISO-format string if valid, empty stirng otherwise)</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>polyfill</code></dt>
-              <dd>Sets whether or not the datepicker is currently using the polyfill version of its UI or not.</dd>
             </dl>
             
           
@@ -730,74 +628,6 @@
             <dl>
               <dt><code>flipped</code></dt>
               <dd>Set whether the back face of the flipbox is showing or not.</dd>
-            </dl>
-            
-          
-        </section>
-      
-        <section id="x-tag-iconbutton" class="main-sect">
-          <h1>iconbutton
-            
-              <small><a href="demos/x-tag-iconbutton/index.html">View Demo &raquo;</a></small>
-            
-          </h1>
-          <p>A button with an anchored icon in addition to a content label</p>
-
-          
-            <h2>Attributes</h2>
-            
-            <dl>
-              <dt><code>src</code></dt>
-              <dd>Defines the image source to use as the button&#39;s icon. Only does something if the icon is a &lt;img&gt; element (which is the default behavior)</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>icon-anchor</code></dt>
-              <dd>Defines the location of the icon relative to the content label. Valid options are &#39;left&#39;, &#39;top&#39;, &#39;right&#39;, &#39;bottom&#39;</dd>
-            </dl>
-            
-          
-
-          
-
-          
-
-          
-            <h2>Getters</h2>
-            
-            <dl>
-              <dt><code>src</code></dt>
-              <dd>Returns the image source used as the button&#39;s icon.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>iconAnchor</code></dt>
-              <dd>Returns the location of the icon relative to the content label. Valid options are &#39;left&#39;, &#39;top&#39;, &#39;right&#39;, &#39;bottom&#39;</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>iconEl</code></dt>
-              <dd>Returns the DOM element representing the button&#39;s icon</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>contentEl</code></dt>
-              <dd>Returns the DOM element representing the button&#39;s content label</dd>
-            </dl>
-            
-          
-
-          
-            <h2>Setters</h2>
-            
-            <dl>
-              <dt><code>src</code></dt>
-              <dd>Sets the image source used as the button&#39;s icon.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>iconAnchor</code></dt>
-              <dd>Sets the location of the icon relative to the content label. Valid options are &#39;left&#39;, &#39;top&#39;, &#39;right&#39;, &#39;bottom&#39;</dd>
             </dl>
             
           
@@ -1234,46 +1064,6 @@
               <dd>Sets the value of the checked attribute</dd>
             </dl>
             
-          
-        </section>
-      
-        <section id="x-tag-togglegroup" class="main-sect">
-          <h1>togglegroup
-            
-              <small><a href="demos/x-tag-togglegroup/index.html">View Demo &raquo;</a></small>
-            
-          </h1>
-          <p>Togglegroups are used to display a set of clickable option buttons, which can be either toggle in an independent or mutually exclusive manner.</p>
-
-          
-            <h2>Attributes</h2>
-            
-            <dl>
-              <dt><code>name</code></dt>
-              <dd>Indicates the name to use for the group of buttons. This is the default keyname that will be submitted if submitted through a form.</dd>
-            </dl>
-            
-            <dl>
-              <dt><code>group</code></dt>
-              <dd>Indicates the name of the the button&#39;s grouping.</dd>
-            </dl>
-            
-          
-
-          
-
-          
-
-          
-            <h2>Getters</h2>
-            
-            <dl>
-              <dt><code>options</code></dt>
-              <dd>Returns an array of the option button DOM elements in this togglegroup</dd>
-            </dl>
-            
-          
-
           
         </section>
       

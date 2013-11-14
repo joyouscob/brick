@@ -23,7 +23,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="index.html">
         <img class="logo" src="site/img/logo.png">
-        Brick<small> 0.9.0</small>
+        Brick<small> 0.9.1</small>
       </a>
     </div>
     <ul class="navbar-nav nav">
@@ -58,9 +58,9 @@
   <section class="row">
     <div class="col-md-4">
       <h2>All Components</h2>
-      <a class="download" href="https://github.com/mozilla/brick/releases/download/0.9.0/brick-0.9.0.zip">
+      <a class="download" href="https://github.com/mozilla/brick/releases/download/0.9.1/brick-0.9.1.zip">
         <h3>Download Brick</h3>
-        <small>version 0.9.0 &mdash; 147K</small>
+        <small>version 0.9.1 &mdash; 115K</small>
       </a>
     </div>
     <div class="col-md-8">
@@ -90,14 +90,6 @@
           
             <div class="col-sm-6">
               <label>
-                datepicker
-                <input type="checkbox" value="x-tag-datepicker"
-                       data-dependencies="calendar">
-              </label>
-            </div>
-          
-            <div class="col-sm-6">
-              <label>
                 deck
                 <input type="checkbox" value="x-tag-deck"
                        data-dependencies="">
@@ -108,14 +100,6 @@
               <label>
                 flipbox
                 <input type="checkbox" value="x-tag-flipbox"
-                       data-dependencies="">
-              </label>
-            </div>
-          
-            <div class="col-sm-6">
-              <label>
-                iconbutton
-                <input type="checkbox" value="x-tag-iconbutton"
                        data-dependencies="">
               </label>
             </div>
@@ -156,14 +140,6 @@
               <label>
                 toggle
                 <input type="checkbox" value="x-tag-toggle"
-                       data-dependencies="">
-              </label>
-            </div>
-          
-            <div class="col-sm-6">
-              <label>
-                togglegroup
-                <input type="checkbox" value="x-tag-togglegroup"
                        data-dependencies="">
               </label>
             </div>
@@ -406,8 +382,8 @@
     function makeZip(js, css, extraFileInfo) {
       var zip = new JSZip();
 
-      zip.file('brick-0.9.0.byob.min.js', js);
-      zip.file('brick-0.9.0.byob.min.css', css);
+      zip.file('brick-0.9.1.byob.min.js', js);
+      zip.file('brick-0.9.1.byob.min.css', css);
 
       for(var i=0; i < extraFileInfo.length; i++){
         var fileData = extraFileInfo[i];
@@ -421,7 +397,7 @@
 
       var blob = zip.generate({type:"blob"});
       console.log(blob);
-      zipLink.setAttribute('download', 'brick-0.9.0-byob.zip');
+      zipLink.setAttribute('download', 'brick-0.9.1-byob.zip');
       zipLink.style.display = 'inline-block';
       zipLink.setAttribute('href', window.URL.createObjectURL(blob));
     }
